@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">smart-manufacture-app</string>
+    <string name="open_nav">Open navigation drawer</string>
+    <string name="close_nav">Close navigation drawer</string>
+    <!-- 新增导航抽屉打开/关闭字符串 -->
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="default_notification_channel_id">alert_channel</string>
+</resources>

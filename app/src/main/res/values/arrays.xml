@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="task_types">
+        <item>订单需求</item>
+        <item>生产计划</item>
+        <item>生产任务</item>
+    </string-array>
+</resources>

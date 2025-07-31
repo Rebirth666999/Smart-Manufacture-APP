@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- 第一个后端接口（原有功能） -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="主系统接口地址"
+        android:textSize="14sp"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/server_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="例如: http://192.168.1.100:8080"
+        android:inputType="text"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/save_ip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存主接口地址"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/teal_200"/>
+
+    <!-- 第二个后端接口（异常记录专用） -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="异常记录接口地址"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/exception_server_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="例如: http://192.168.1.101:5000"
+        android:inputType="text"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/save_exception_ip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存异常接口地址"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="用户名"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="登录"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple_500"/>
+
+</LinearLayout>
