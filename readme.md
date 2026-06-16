@@ -14,14 +14,6 @@
 
 ---
 
-仔细核对了你上传的项目目录截图，之前的大纲确实遗漏了底层架构包（`api/`、`model/`）以及后台服务、拦截器和多项独立布局文件。
-
-我已经根据实际的代码结构为你进行了深度的信息补全与映射，纠正了之前布局文件命名不准确的问题（如统一写成 `activity_main.xml` 的错误），并完善了数据模型和网络层的分类。
-
-你可以直接全选、复制以下内容，替换你文档中的对应部分：
-
----
-
 ## ⚙️ 核心功能模块
 
 
@@ -74,58 +66,107 @@
 ## 📂 项目核心目录结构
 
 ```text
-Smart-Manufacture-APP/
-├── app/
-│   ├── src/
-│   │   └── main/
-│   │       ├── AndroidManifest.xml                   # Android 核心清单文件 (权限与四大组件注册)
-│   │       ├── java/com/pzy/smart_manufacture_app/   # Java 源码主包目录
-│   │       │   ├── ApiClient.java                    # 核心网络客户端封装 (Retrofit/OkHttp)
-│   │       │   ├── ApiService.java                   # 主业务系统 API 路由接口
-│   │       │   ├── DeviceOee.java                    # 设备综合效率数据模型
-│   │       │   ├── DeviceStatus.java                 # 设备实时状态模型
-│   │       │   ├── ExceptionRecordsActivity.java     # 异常记录与多媒体管控业务页
-│   │       │   ├── HomeActivity.java                 # 数字化看板与核心指标数据页
-│   │       │   ├── ImageAdapter.java                 # 多媒体图片列表动态适配器
-│   │       │   ├── ImageApi.java                     # 异常多媒体系统 API 路由接口
-│   │       │   ├── ImageResponse.java                # 图片上传交互响应模型
-│   │       │   ├── LoginActivity.java                # 登录管控与双接口网关配置页
-│   │       │   ├── MainActivity.java                 # 客户端主程序入口/导航框架壳
-│   │       │   ├── NotificationService.java          # 报警轮询与系统级通知后台服务
-│   │       │   ├── Task.java                         # 生产任务数据模型
-│   │       │   ├── TasksActivity.java                # 生产任务状态机流转管理页
-│   │       │   ├── TokenInterceptor.java             # Http 鉴权 Token 全局拦截器
-│   │       │   └── WorkOrder.java                    # 生产工单数据模型
-│   │       └── res/                                  # 静态资源目录
-│   │           ├── drawable/                         # 矢量图与图形资源
-│   │           │   ├── ic_launcher_background.xml
-│   │           │   └── ic_launcher_foreground.xml
-│   │           ├── layout/                           # UI 视图布局层
-│   │           │   ├── activity_exception_records.xml# 异常记录页面布局
-│   │           │   ├── activity_home.xml             # 数字化看板页面布局
-│   │           │   ├── activity_login.xml            # 登录认证页面布局
-│   │           │   ├── activity_main.xml             # 客户端主页面框架布局
-│   │           │   ├── activity_tasks.xml            # 生产任务台页面布局
-│   │           │   ├── item_image.xml                # 图片网格单项卡片布局
-│   │           │   └── item_task.xml                 # 生产任务单项卡片布局
-│   │           ├── mipmap/                           # 应用图标资源 (适配各分辨率)
-│   │           ├── values/                           # 全局常量资源
-│   │           │   ├── colors.xml                    # 颜色规范定义
-│   │           │   ├── strings.xml                   # 文本常量定义
-│   │           │   └── themes.xml                    # 主题与样式定义
-│   │           └── xml/                              # 应用级特殊 XML 配置
-│   │               ├── backup_rules.xml              # 数据备份规则
-│   │               └── data_extraction_rules.xml     # 数据提取规则
-│   ├── build.gradle.kts                              # 模块级构建配置 (Module: app)
-│   └── proguard-rules.pro                            # 代码混淆与压缩规则
-├── gradle/
-│   └── wrapper/
-│       └── gradle-wrapper.properties                 # Gradle Wrapper 版本定义
-├── build.gradle.kts                                  # 项目级构建配置 (Project)
-├── gradle.properties                                 # Gradle 全局编译参数配置
-├── local.properties                                  # 本地 SDK 路径配置 (私密不上传)
-├── settings.gradle.kts                               # 项目级组件注入与中央仓库声明
-└── README.md                                         # 项目工程技术文档
+app
+├─ manifests
+│  └─ AndroidManifest.xml              # 应用全局清单文件，声明APP所需权限（如网络、相机等）、注册所有Activity组件，指定LoginActivity为APP启动入口，是Android系统识别APP配置的核心文件
+├─ java
+│  └─ com.pzy.smart_manufacture_app
+│     ├─ AboutActivity.java            # 展示应用的版本信息，实现侧边导航栏功能，支持跳转到其他功能页面。
+│     ├─ AlertAdapter.java             # 为 RecyclerView 提供数据适配功能，将报警数据列表绑定到对应的视图项，展示每条报警的详细信息。
+│     ├─ AlertApi.java                 # 定义获取报警信息的 Retrofit 接口，声明调用报警接口的 GET 请求方法。
+│     ├─ AlertCheckWorker.java         # 作为后台工作者组件，定时获取报警信息数量，当存在报警信息时发送通知，并保存当前报警数量到 SharedPreferences 中。
+│     ├─ AlertItem.java                # 封装单条报警信息的数据模型，包含报警标签、任务 ID、发起人信息等字段及对应的 getter 方法。
+│     ├─ AlertResponse.java            # 定义报警接口响应的数据模型，包含响应码、提示信息和报警数据列表，其中报警数据列表的每一项封装了具体的报警详情。
+│     ├─ AlertsActivity.java           # 实现报警信息展示页面，包含权限检查、通知渠道创建、加载报警数据并通过 RecyclerView 展示，同时处理侧边导航栏的跳转逻辑。
+│     ├─ ApiClient.java                # 提供 Retrofit 客户端的单例创建方法，分别生成针对常规接口和异常接口的 Retrofit 实例，简化网络请求客户端的创建。
+│     ├─ ClearResponse.java            # 定义清除操作响应的数据模型，包含操作是否成功和提示信息两个字段及对应的 getter 方法。
+│     ├─ ExceptionApi.java             # 定义了用于获取异常消息记录的 Retrofit 网络请求接口，通过 GET 请求访问指定接口并携带 Authorization 请求头。
+│     ├─ ExceptionMessage.java         # 封装了异常消息的实体类，包含异常记录的 ID、编码、描述、时间、处理结果等属性及对应的获取方法。
+│     ├─ ExceptionMessageAdapter.java  # 为 RecyclerView 提供适配功能，用于展示异常消息列表数据，绑定数据到对应的列表项视图，并修复了数据为空时的空指针异常。
+│     ├─ ExceptionMessageResponse.java # 封装了异常消息列表接口的返回数据结构，包含状态码、提示信息、总条数和异常消息列表数据。
+│     ├─ HomeActivity.java             # 作为应用的首页 Activity，负责检查用户登录状态、设置页面布局（含 Toolbar、导航抽屉、扫码悬浮按钮），并处理导航菜单和顶部菜单的点击跳转逻辑。
+│     ├─ LoginActivity.java            # 登录页面控制器，登录流程核心枢纽：收集用户输入的服务器地址、账号密码，调用LoginApi发起登录请求，处理登录成功/失败逻辑，保存Token和服务器地址到本地，跳转首页
+│     ├─ LoginApi.java                 # 登录相关网络接口定义（Retrofit），定义登录接口（POST /login）和扫码确认登录接口的请求方式、参数（LoginRequest）和响应（LoginResponse）规则
+│     ├─ LoginRequest.java             # 登录请求数据模型类（POJO），封装用户名和密码，作为登录请求的请求体，序列化为JSON传递给服务端
+│     ├─ LoginResponse.java            # 登录响应数据模型类，解析服务端返回的登录结果，包含状态码、提示信息、Token等核心数据，提供getter方法供前端获取数据
+│     ├─ MainActivity.java             # 作为应用主界面 Activity，处理用户登录状态校验、侧边导航栏交互、当前时间展示、生产相关任务数据（订单需求 / 生产计划 / 生产任务）的网络请求与展示等核心逻辑。
+│     ├─ ManufacturePlan.java          # 定义生产计划实体类，包含生产计划的核心属性（如计划编码、订单编码、状态等）及对应的获取方法，还提供拼接计划描述信息的getPlanDesc方法。
+│     ├─ ManufacturePlanApi.java       # 定义 Retrofit 接口，通过 GET 请求结合 Authorization 头信息获取生产计划列表数据。
+│     ├─ ManufacturePlanResponse.java  # 定义生产计划响应数据结构，包含响应状态码、消息、总数及生产计划列表，内部嵌套的生产计划实体类涵盖生产计划全量属性及对应的获取方法。
+│     ├─ ManufactureTask.java          # 定义基础的生产任务实体类，包含任务编码和任务描述属性及对应的 get/set 方法。
+│     ├─ ManufactureTaskApi.java       # 定义 Retrofit 接口，通过 GET 请求结合 Authorization 头信息获取生产任务列表数据。
+│     ├─ ManufactureTaskResponse.java  # 定义生产任务响应数据结构，包含响应状态码、消息、总数及生产任务列表，内部嵌套生产任务实体类并提供属性获取和任务描述拼接方法。
+│     ├─ MyApplication.java            # 自定义 Application 类，用于全局获取应用上下文和 Application 实例，在应用启动时初始化自身实例。
+│     ├─ NetworkUtils.java             # 提供网络连接状态检测工具方法，通过 Context 获取网络连接管理器判断当前网络是否可用。
+│     ├─ OrderDemand.java              # 封装单个订单需求的核心字段，提供各字段的获取方法，还包含一个拼接产品、需求数量、单价信息的便捷方法。
+│     ├─ OrderDemandApi.java           # 定义获取订单需求列表的 Retrofit 接口，通过 GET 请求访问指定接口并携带 Authorization 请求头，返回封装订单需求的 TaskResponse 类型数据。
+│     ├─ OrderDemandResponse.java      # 定义了订单需求响应数据结构，包含响应状态码、消息、总数及订单需求列表，内部嵌套 OrderDemand 类封装单个订单需求的详细字段及对应的获取方法。
+│     ├─ PortraitCaptureActivity.java  # 自定义的竖屏扫码捕获 Activity，继承自 CaptureActivity，添加自定义扫描 UI 并实现扫描线的无限滚动动画效果。
+│     ├─ ProfileActivity.java          # 展示用户个人信息页面，包含导航抽屉功能，从本地缓存和网络接口获取并展示用户基本信息、详细信息，处理认证失败和网络错误等异常情况。
+│     ├─ QrScannerActivity.java        # 实现安卓端扫码登录功能，强制竖屏扫码，处理内置 / 外部扫码结果，解析二维码中的令牌并调用接口完成网页端登录确认。
+│     ├─ RecordDetailActivity.java     # 展示异常记录的详情页面，接收文件名参数并调用接口获取记录详情，格式化展示文件信息、上传时间，使用 Glide 加载并显示高清图片。
+│     ├─ RecordDetailResponse.java     # 定义异常记录详情的响应数据结构，通过 SerializedName 注解映射接口返回字段，包含文件名称、描述、上传时间、图片 / 文本链接等字段及对应的获取方法。
+│     ├─ Records.java                  # 数据模型类，封装异常记录的文件名、描述、图片 URL 等属性，通过 Gson 注解映射接口返回字段，并提供对应的 getter/setter 方法。
+│     ├─ RecordsActivity.java          # 作为异常记录功能的主活动，实现了拍照上传异常图片、加载 / 清除服务器异常记录、侧边导航栏切换等核心功能，处理相机权限请求、图片文件创建与上传、接口调用及结果反馈。
+│     ├─ RecordsAdapter.java           # RecyclerView 的适配器类，用于将异常记录数据列表绑定到 UI 视图，通过 Glide 加载图片，设置条目点击事件跳转到详情页。
+│     ├─ RecordsApi.java               # Retrofit 接口定义类，声明获取所有异常图片、获取单张图片详情、上传图片带描述、清除所有记录的 HTTP 请求方法。
+│     ├─ RecordsResponse.java          # 接口响应数据模型类，封装异常记录列表接口返回的成功状态、记录数量和图片记录列表，提供对应的 getter 方法。
+│     ├─ Routes.java                   # 工具类，管理服务器基础地址、异常记录接口地址的存取，处理 JWT 密钥生成 / 读取，封装 Token 有效性校验和格式处理逻辑。
+│     ├─ SettingsActivity.java         # 设置页面的活动类，管理侧边导航栏跳转，提供记住登录凭证的开关功能，可读取 / 修改 SharedPreferences 中的记住密码状态并清除保存的登录信息。
+│     ├─ TaskAdapter.java              # 实现 RecyclerView 的适配器，用于将 TaskResponse.Task 类型的任务数据绑定到列表项视图，支持空数据视图的显示控制和数据更新。
+│     ├─ TaskApi.java                  # 定义获取任务相关数据的 Retrofit 接口，声明获取订单需求、生产计划、生产任务列表的 GET 请求方法。
+│     ├─ TaskResponse.java             # 定义了包含状态码、消息和任务列表的通用任务响应数据结构，同时内置了包含编码和描述的 Task 内部类，用于统一封装任务相关接口的返回数据。
+│     ├─ TasksActivity.java            # 实现任务页面的核心逻辑，包含侧边栏导航、TabLayout 切换不同任务类型（订单需求 / 生产计划 / 生产任务）、通过 Retrofit 加载任务数据并展示到 RecyclerView。
+│     ├─ UploadActivity.java           # 实现图片选择和上传功能的 Activity，支持从相册选择图片、获取图片真实路径，并通过 Retrofit 以 Multipart 形式上传图片和描述信息。
+│     ├─ UploadResponse.java           # 定义文件上传接口的响应数据结构，包含上传是否成功、消息、文件名、文件 URL 等字段，适配 Gson 解析的 SerializedName 注解映射字段名。
+│     ├─ UserApi.java                  # 定义获取用户个人信息的 Retrofit 接口，声明 GET 请求获取用户资料的方法并支持 Authorization 请求头。
+│     ├─ UserListResponse.java         # 定义用户列表接口的响应数据结构，包含状态码、消息、总条数和用户列表，用户信息中嵌套部门信息。
+│     └─ UserProfileResponse.java      # 定义用户个人信息接口的响应数据结构，包含用户基本信息、部门、角色等多层嵌套数据，提供安全的 getter 方法避免空指针。
+├─ com.pzy.smart_manufacture_app (androidTest)
+├─ com.pzy.smart_manufacture_app (test)
+├─ java (generated)
+├─ res
+│  ├─ drawable
+│  │  ├─ app_logo.png
+│  │  ├─ ic_image_error.jpg
+│  │  ├─ ic_launcher_background.xml
+│  │  └─ ic_scan.png
+│  ├─ layout
+│  │  ├─ activity_about.xml
+│  │  ├─ activity_alerts.xml
+│  │  ├─ activity_home.xml
+│  │  ├─ activity_login.xml
+│  │  ├─ activity_main.xml
+│  │  ├─ activity_profile.xml
+│  │  ├─ activity_record_detail.xml
+│  │  ├─ activity_records.xml
+│  │  ├─ activity_settings.xml
+│  │  ├─ activity_tasks.xml
+│  │  ├─ activity_upload.xml
+│  │  ├─ item_alert.xml
+│  │  ├─ item_empty.xml
+│  │  ├─ item_exception_message.xml
+│  │  ├─ item_image.xml
+│  │  ├─ item_records_message.xml
+│  │  ├─ item_task.xml
+│  │  └─ scanner_layout.xml
+│  ├─ menu
+│  │  ├─ home_menu.xml
+│  │  └─ nav_drawer_menu.xml
+│  ├─ mipmap
+│  │  └─ ic_launcher.xml (anydpi-v26)
+│  ├─ values
+│  │  ├─ themes
+│  │  │  ├─ themes.xml
+│  │  │  └─ themes.xml (night)
+│  │  ├─ arrays.xml
+│  │  ├─ colors.xml
+│  │  ├─ strings.xml
+│  │  └─ styles.xml
+│  └─ xml
+│     └─ file_paths.xml
+├─ res (generated)
+└─ Gradle Scripts
 ```
 
 ---
