@@ -16,51 +16,85 @@
 
 ## ⚙️ 核心功能模块
 
+### 一、登录认证模块（Login 系列文件）
+**包含文件**：LoginActivity、LoginApi、LoginRequest、LoginResponse
 
-### 1. 用户认证与网关配置 (Authentication & Gateway)
+**模块作用**：应用的入口功能模块，负责用户账号密码登录的完整流程：收集用户输入的服务器地址、账号密码，封装请求参数调用后端登录接口，解析登录响应获取身份Token并持久化存储，登录成功后跳转至首页；同时支持扫码登录确认的接口能力。
 
-* **核心类：** `LoginActivity.java`、`TokenInterceptor.java` & `activity_login.xml`
-* **功能描述：** 提供工业系统权限鉴权接入。底层利用 `TokenInterceptor` 实现全局请求头的 Token 注入与过期自动拦截。
-* **双路由网关配置：** UI 层面不仅提供标准账户密码表单，更内置了动态网关入口，允许用户在登录时分别输入“主业务系统（若依）”与“异常记录系统（Python）”的 API 地址，实现底层数据流的物理隔离。
-* **会话管理：** 系统主页底部提供一键“退出登录”功能，支持随时销毁本地 Token 会话并退回安全网关。
+### 二、报警通知模块（Alert 系列文件）
+**包含文件**：AlertsActivity、AlertAdapter、AlertApi、AlertCheckWorker、AlertItem、AlertResponse
 
+**模块作用**：负责生产异常报警的检测与通知。通过后台定时任务Worker轮询后端报警接口，检测到新报警时发送系统通知提醒用户；前端提供报警列表页面，展示报警发起人、流程、创建时间等详情，支持权限校验与空状态展示。
 
+### 三、异常记录管理模块（Exception + Records 系列文件）
+**包含文件**：
+- Exception前缀：ExceptionApi、ExceptionMessage、ExceptionMessageAdapter、ExceptionMessageResponse
+- Records前缀：Records、RecordsActivity、RecordsAdapter、RecordsApi、RecordsResponse、RecordDetailActivity、RecordDetailResponse
 
-### 2. 实时报警通知机制 (Alarm Notifications)
+**模块作用**：生产异常记录的全生命周期管理模块。支持从后端拉取异常消息列表并展示；支持相机拍照/相册选择图片，填写描述后上传异常记录；支持查看异常记录详情（包含图片、上传时间、描述等）；支持批量清除所有异常记录，是现场异常上报与追溯的核心模块。
 
-* **核心类：** `NotificationService.java`
-* **功能描述：** 基于 Android 原生 Service 组件打造的后台常驻服务。系统初始化及登录验证后，自动轮询并检查车间系统的报警队列。若检测到异常数据，将直接通过 Android 系统级通知栏（Notification Bar）向下发报，**直观展示报警的设备编号及具体原因（例如：`设备 [Device-001] 温度过高`）**，确保车间突发状况的零延迟触达。
+### 四、生产任务管理模块（Task + Manufacture + OrderDemand 系列文件）
+**包含文件**：
+- Task前缀：TasksActivity、TaskAdapter、TaskApi、TaskResponse
+- Manufacture前缀：ManufacturePlan、ManufacturePlanApi、ManufacturePlanResponse、ManufactureTask、ManufactureTaskApi、ManufactureTaskResponse
+- OrderDemand前缀：OrderDemand、OrderDemandApi、OrderDemandResponse
 
-### 3. 车间数字化看板 (Home Dashboard)
+**模块作用**：生产业务核心模块，通过Tab分类展示三类生产数据：订单需求、生产计划、生产任务。分别调用对应后端接口拉取数据，解析后以列表形式展示任务编码、产品信息、数量、状态、计划完成时间等内容，支持权限校验与空状态提示，方便产线人员查看生产任务进度。
 
-* **核心类：** `HomeActivity.java` & `activity_home.xml`
-* **数据模型：** `DeviceOee.java`、`DeviceStatus.java`、`WorkOrder.java`
-* **功能描述：** 采用多维图表与核心指标卡片构建的数字化概览页：
-* **业务指标卡片：** 顶部聚合展示当前“待办任务”、“我的工单”及“异常记录”的数量，提供直观的工作量盘点。
-* **设备状态分布：** 使用**饼状图**实时呈现当前车间所有设备的运行态势（运行、空闲、故障）。
-* **设备 OEE 分析：** 采用**柱状图**横向对比不同设备（如 Device-001 / 002）的综合效率百分比。
-* **产线良率统计：** 利用**折线/面积趋势图**展示生产质量的历史波动情况，辅助现场管理与决策。
+### 五、文件上传模块（Upload 系列文件）
+**包含文件**：UploadActivity、UploadResponse
 
+**模块作用**：通用文件上传功能模块，提供相册图片选择、预览、携带描述信息上传的能力，封装了文件路径解析、Multipart表单上传逻辑，为异常记录等需要附件上传的业务提供支撑。
 
+### 六、用户信息模块（User + Profile 系列文件）
+**包含文件**：ProfileActivity、UserApi、UserListResponse、UserProfileResponse
 
-### 4. 生产任务分发与流转 (Task Management)
+**模块作用**：用户个人信息管理模块。调用后端用户资料接口获取用户基本信息、所属部门、角色、岗位组等数据，在个人信息页结构化展示；支持本地缓存用户信息，同时处理认证失效时的跳转登录逻辑。
 
-* **核心类：** `TasksActivity.java` & `activity_tasks.xml`、`item_task.xml`
-* **数据模型：** `Task.java`
-* **功能描述：** 实现跨角色（排产员、操作工）的任务动态流转管控。
-* **任务卡片渲染：** 基于 RecyclerView 定制卡片视图，详细展示各任务的“工单号”、“产品名称”、“计划数量”及“当前状态”。
-* **状态机闭环：** 在移动端本地提供一键状态切换按钮，支持将任务从“待执行”状态推进至“开始执行”，并最终标记为“完成任务”，所有操作流转实时同步回写至后端主业务数据库。
+### 七、扫码功能模块（QrScanner + PortraitCapture 系列文件）
+**包含文件**：QrScannerActivity、PortraitCaptureActivity、scanner_layout.xml
 
+**模块作用**：竖屏扫码工具模块。基于ZXing实现定制化竖屏扫码界面，添加扫描线动画，支持解析二维码内容；主要用于网页端扫码登录确认（扫码后携带移动端Token调用后端接口完成网页登录），也可扩展支持设备扫码绑定等场景。
 
+### 八、首页与导航模块（Home + Main 系列文件）
+**包含文件**：HomeActivity、MainActivity
 
-### 5. 现场异常多媒体追踪 (Exception Records)
+**模块作用**：应用登录后的主入口与导航分发中心。集成侧边抽屉导航栏，提供所有业务模块（任务、报警、异常记录、个人信息、设置、关于）的跳转入口；首页提供悬浮扫码按钮，快速进入扫码功能，是整个应用的页面调度中枢。
 
-* **核心类：** `ExceptionRecordsActivity.java`、`ImageAdapter.java` & `activity_exception_records.xml`、`item_image.xml`
-* **网络与数据：** `ImageApi.java`、`ImageResponse.java`
-* **功能描述：** 跨过主业务库，直接对接独立 Python 后端的轻量级图文上报与追踪系统。
-* **图文融合上报：** 提供独立的添加视图，支持直接拉起手机原生相机进行故障现场取证，并提供“异常描述(选填)”文本域，实现图文数据的捆绑上传。
-* **网格流展示：** 成功上传的异常记录，通过 `ImageAdapter` 以网格（Grid）形式动态渲染在列表中。
-* **存储优化：** Python 后端采用纯物理文件系统落地图片，避免了 MySQL 存储多媒体 BLOB 数据导致的 I/O 性能灾难，实现了移动端列表的高速异步拉取。
+### 九、系统设置模块（Settings 系列文件）
+**包含文件**：SettingsActivity
+
+**模块作用**：应用配置管理模块，提供用户偏好设置能力，比如“记住密码”开关控制，开关状态持久化存储，关闭记住密码时自动清除已保存的账号密码，保障用户数据安全。
+
+### 十、关于页面模块（About 系列文件）
+**包含文件**：AboutActivity
+
+**模块作用**：应用信息展示模块，自动读取并展示应用版本号，同时集成侧边导航栏，支持快速跳转至其他页面。
+
+### 十一、公共基础模块（通用工具与底层组件）
+**包含文件**：MyApplication、ApiClient、Routes、NetworkUtils、ClearResponse
+
+**模块作用**：为所有业务模块提供底层基础能力：
+1. `MyApplication`：全局应用上下文，提供全局Context获取能力；
+2. `ApiClient`：Retrofit网络客户端封装，统一管理主业务接口、异常接口的网络实例；
+3. `Routes`：接口地址与Token管理工具，统一维护主服务、异常服务的基础地址，提供Token有效性校验与格式处理；
+4. `NetworkUtils`：网络状态检测工具，判断当前设备网络是否可用；
+5. `ClearResponse`：通用清除操作响应实体，统一解析后端清除类接口的返回结果。
+
+### 十二、资源配置模块（res 目录）
+**包含文件**：drawable图片资源、layout布局文件、menu菜单资源、mipmap启动图标、values主题/颜色/字符串配置、xml文件路径配置
+
+**模块作用**：为所有页面提供UI布局、样式、图片、文本等资源，统一管理应用的视觉风格与静态文案，支持日间/夜间主题切换；同时提供FileProvider所需的文件路径配置，适配Android文件访问权限。
+
+### 十三、应用配置与构建模块
+**包含文件**：AndroidManifest.xml、Gradle Scripts、测试目录（androidTest/test）、generated自动生成目录
+
+**模块作用**：
+1. `AndroidManifest.xml`：应用全局清单文件，声明网络、相机、存储、通知等所需权限，注册所有Activity组件，指定应用启动页与应用图标、主题等基础配置；
+2. `Gradle Scripts`：项目构建脚本，定义依赖库、编译版本、签名配置等构建规则；
+3. `androidTest/test`目录：存放单元测试与仪器测试代码，用于功能验证与测试；
+4. `generated`目录：编译过程自动生成的代码与资源文件，无需手动维护。
+
 ---
 
 ## 📂 项目核心目录结构
