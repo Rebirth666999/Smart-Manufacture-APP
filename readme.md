@@ -97,6 +97,151 @@
 
 ---
 
+## 🧩 功能模块的组成
+
+### 一、Java 代码层（按文件后缀/类型分组）
+
+#### 1. **Api 接口定义类（后缀为 Api）**
+**包含文件**：LoginApi、AlertApi、ExceptionApi、ManufacturePlanApi、ManufactureTaskApi、OrderDemandApi、RecordsApi、TaskApi、UserApi
+
+**核心功能**：
+这类文件是 Retrofit 网络框架的**请求契约接口**，是客户端与后端服务通信的规则定义层。通过注解声明 HTTP 请求的方法（GET/POST）、接口路径、请求参数（Header、请求体、路径参数）、返回数据类型，完全不包含业务逻辑，仅作为网络请求的抽象规范。
+
+**共性特点**：全部为 interface 接口，每个接口对应一个业务领域的后端接口集合，是网络层与数据层的边界，由 Retrofit 动态生成实现类。
+
+
+#### 2. **Activity 页面控制器类（后缀为 Activity）**
+**包含文件**：AboutActivity、AlertsActivity、HomeActivity、LoginActivity、MainActivity、PortraitCaptureActivity、ProfileActivity、QrScannerActivity、RecordDetailActivity、RecordsActivity、SettingsActivity、TasksActivity、UploadActivity
+
+**核心功能**：
+这类文件是 Android 四大组件之一，是**每个业务页面的交互中枢**。负责页面生命周期管理、布局加载、控件事件监听、调用网络/工具能力、数据渲染、页面跳转传参等，是用户直接交互的界面载体。
+
+**共性特点**：均继承自 `AppCompatActivity`，与 `res/layout` 下的同名布局文件一一对应；每个 Activity 对应一个独立业务页面，承担类似 MVC 架构中 Controller 的角色，串联 UI 视图与数据层。
+
+
+#### 3. **Adapter 列表适配器类（后缀为 Adapter）**
+**包含文件**：AlertAdapter、ExceptionMessageAdapter、RecordsAdapter、TaskAdapter
+
+**核心功能**：
+这类文件是 RecyclerView 列表组件的**数据与UI的桥梁**。负责创建列表项视图、将业务数据绑定到对应UI控件、处理列表项点击事件、管理数据集刷新，实现列表的视图复用与高效渲染。
+
+**共性特点**：均继承自 `RecyclerView.Adapter`，内部包含 ViewHolder 内部类缓存控件；与 `res/layout` 下的同名 item 布局文件对应，专门服务于列表类页面。
+
+
+#### 4. **Response 响应实体类（后缀为 Response）**
+**包含文件**：AlertResponse、ClearResponse、ExceptionMessageResponse、LoginResponse、ManufacturePlanResponse、ManufactureTaskResponse、OrderDemandResponse、RecordDetailResponse、RecordsResponse、TaskResponse、UploadResponse、UserListResponse、UserProfileResponse
+
+**核心功能**：
+这类文件是**后端接口返回数据的 Java 映射模型**，通过 Gson 将后端返回的 JSON 数据反序列化为 Java 对象。统一封装接口的响应状态码、提示消息、业务数据体，让上层代码可以安全、规范地获取接口返回数据。
+
+**共性特点**：均为纯数据类（POJO），仅包含字段与对应的 getter 方法；大量使用内部类嵌套封装复杂数据结构，严格对齐后端接口的返回格式，是数据层的核心载体。
+
+
+#### 5. **Request 请求实体类（后缀为 Request）**
+**包含文件**：LoginRequest
+
+**核心功能**：
+这类文件是**发往后端接口的请求体数据模型**，将前端输入的参数封装为标准 Java 对象，通过 Gson 序列化为 JSON 后作为请求体发送给后端，规范请求参数的格式与结构。
+
+**共性特点**：均为纯数据类，仅包含字段、构造方法与 getter，严格对应后端接口的入参结构；本项目中仅登录模块有独立请求类，其余接口多通过 Retrofit 注解直接传参。
+
+
+#### 6. **业务数据实体类（单条业务数据模型）**
+**包含文件**：AlertItem、ExceptionMessage、ManufacturePlan、ManufactureTask、OrderDemand、Records
+
+**核心功能**：
+这类文件是**单一业务条目的数据模型**，封装了对应业务的核心字段与便捷业务方法（比如拼接描述文本），是列表数据、详情数据的最小数据单元，承接接口响应数据与 UI 展示之间的数据转换。
+
+**共性特点**：均为纯数据 POJO 类，字段与业务属性一一对应；大多作为 Response 中 rows 列表的元素类型，部分提供便捷的业务拼接方法。
+
+
+#### 7. **Worker 后台任务类（后缀为 Worker）**
+**包含文件**：AlertCheckWorker
+
+**核心功能**：
+基于 Android Jetpack WorkManager 的**后台任务组件**，用于在应用退到后台、页面关闭的场景下，仍能执行一次性/周期性的后台任务。本项目中用于后台轮询报警接口、检测新报警并发送系统通知。
+
+**共性特点**：继承自 `Worker`，在 `doWork` 方法中执行耗时后台逻辑；不依赖前台页面，适合执行轻量、可延迟的后台任务。
+
+
+#### 8. **全局基础与工具类**
+**包含文件**：MyApplication、ApiClient、Routes、NetworkUtils
+
+**核心功能**：
+为全项目提供通用基础能力，是所有业务模块的公共依赖，避免重复代码：
+- `MyApplication`：自定义 Application 类，应用启动时初始化全局上下文，提供全局 Context 获取入口；
+- `ApiClient`：网络客户端封装，统一创建和管理 Retrofit 实例，区分主业务接口与异常接口两套客户端；
+- `Routes`：配置管理工具，统一管理服务端基础地址、Token 的存取与校验、接口地址格式化；
+- `NetworkUtils`：网络状态工具，提供网络连接状态检测能力。
+
+**共性特点**：均为全局单例或静态工具类，无页面属性，封装通用能力，统一基础配置入口。
+
+
+### 二、资源文件层（res 目录，按类型分组）
+
+#### 1. **Layout 布局文件（.xml 格式）**
+**包含文件**：
+- 页面布局：`activity_xxx.xml` 系列（与 Activity 一一对应）
+- 列表项布局：`item_xxx.xml` 系列（与 Adapter 一一对应）
+- 特殊布局：`scanner_layout.xml`（扫码页自定义UI）
+
+**核心功能**：
+通过 XML 声明式定义页面与控件的 UI 结构、位置、尺寸、样式，是 Android 界面的视觉结构描述；与对应的 Activity/Adapter 绑定，通过布局加载器渲染为可视化界面。
+
+**共性特点**：遵循命名规范，`activity_` 前缀对应页面、`item_` 前缀对应列表项；纯 XML 格式，仅负责UI结构，不包含业务逻辑。
+
+
+#### 2. **Drawable 图形资源**
+**包含文件**：app_logo.png、ic_image_error.jpg、ic_launcher_background.xml、ic_scan.png
+
+**核心功能**：
+存放应用用到的位图图片、XML 形状、选择器等图形资源，用于应用图标、页面占位图、功能按钮图标、背景样式等 UI 展示。
+
+**共性特点**：分为位图资源（png/jpg）与 XML 可绘制资源，可通过 `R.drawable` 全局引用，适配不同设备分辨率。
+
+
+#### 3. **Menu 菜单资源**
+**包含文件**：home_menu.xml、nav_drawer_menu.xml
+
+**核心功能**：
+定义顶部选项菜单、侧边抽屉导航菜单的菜单项结构、图标、文本，配合 Activity 的菜单机制实现功能导航与操作入口。
+
+**共性特点**：XML 格式定义菜单项，通过 Activity 的 `onCreateOptionsMenu` 或 NavigationView 加载使用。
+
+
+#### 4. **Values 样式配置资源**
+**包含文件**：
+- 主题：themes.xml、themes.xml (night)
+- 基础配置：arrays.xml、colors.xml、strings.xml、styles.xml
+
+**核心功能**：
+统一管理应用的样式配置，包括颜色值、字符串文本、数组、控件样式、全局主题，支持日间/夜间主题切换；实现样式与代码分离，方便全局修改与多语言适配。
+
+**共性特点**：纯 XML 配置，通过 `R.xxx` 全局引用，是 Android UI 规范的核心配置层。
+
+
+#### 5. **Xml 系统配置文件**
+**包含文件**：file_paths.xml
+
+**核心功能**：
+FileProvider 的文件路径配置文件，定义应用可对外共享的文件目录，适配 Android 7.0+ 的文件访问权限，用于拍照、文件上传等场景的 URI 共享。
+
+**共性特点**：属于系统组件配套配置，声明应用的文件访问权限范围。
+
+
+### 三、构建与全局配置
+
+#### 1. **应用清单与构建脚本**
+**包含文件**：AndroidManifest.xml、Gradle Scripts、测试目录、generated 目录
+
+**核心功能**：
+- `AndroidManifest.xml`：应用的全局身份证，声明应用包名、系统权限、四大组件、启动页、应用图标主题等核心配置，是系统识别与启动应用的核心文件。
+- `Gradle Scripts`：项目构建脚本，定义编译 SDK 版本、第三方依赖库、签名配置、打包规则等。
+- 测试目录：存放单元测试与设备测试代码，用于功能验证与回归测试。
+- `generated`：编译自动生成的代码与资源（如 R 文件、BuildConfig），无需手动维护。
+
+---
+
 ## 📂 项目核心目录结构
 
 ```text
