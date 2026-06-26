@@ -74,10 +74,10 @@
 
 <table>
   <tr>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP登录页面.jpg" width="100%"/><br/>登录页面</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP扫码登录网页端页面.jpg" width="100%"/><br/>扫码登录</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP首页.jpg" width="100%"/><br/>APP首页</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP侧边导航栏展示.jpg" width="100%"/><br/>侧边导航栏</td>
+    <td align="center"><img src="./APP登录页面.jpg" width="100%"/><br/>登录页面</td>
+    <td align="center"><img src="./APP扫码登录网页端页面.jpg" width="100%"/><br/>扫码登录</td>
+    <td align="center"><img src="./APP首页.jpg" width="100%"/><br/>APP首页</td>
+    <td align="center"><img src="./APP侧边导航栏展示.jpg" width="100%"/><br/>侧边导航栏</td>
   </tr>
 </table>
 
@@ -85,9 +85,9 @@
 
 <table>
   <tr>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP任务信息-订单需求页面.jpg" width="100%"/><br/>订单需求</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP任务信息-生产计划页面.jpg" width="100%"/><br/>生产计划</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP任务信息-生产任务页面.jpg" width="100%"/><br/>生产任务</td>
+    <td align="center"><img src="./APP任务信息-订单需求页面.jpg" width="100%"/><br/>订单需求</td>
+    <td align="center"><img src="./APP任务信息-生产计划页面.jpg" width="100%"/><br/>生产计划</td>
+    <td align="center"><img src="./APP任务信息-生产任务页面.jpg" width="100%"/><br/>生产任务</td>
   </tr>
 </table>
 
@@ -95,10 +95,10 @@
 
 <table>
   <tr>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP任务栏报警通知.jpg" width="100%"/><br/>后台报警通知</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP报警信息页面.jpg" width="100%"/><br/>报警列表</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP异常记录页面.jpg" width="100%"/><br/>异常上传与记录</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP异常展示页面.jpg" width="100%"/><br/>异常详情展示</td>
+    <td align="center"><img src="./APP任务栏报警通知.jpg" width="100%"/><br/>后台报警通知</td>
+    <td align="center"><img src="./APP报警信息页面.jpg" width="100%"/><br/>报警列表</td>
+    <td align="center"><img src="./APP异常记录页面.jpg" width="100%"/><br/>异常上传与记录</td>
+    <td align="center"><img src="./APP异常展示页面.jpg" width="100%"/><br/>异常详情展示</td>
   </tr>
 </table>
 
@@ -106,23 +106,8 @@
 
 <table>
   <tr>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP个人信息页面.jpg" width="100%"/><br/>个人信息</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP设置页面.jpg" width="100%"/><br/>系统设置</td>
-    <td align="center"><img src="E:\Downloads\WPS云盘\1772871053\WPS企业云盘\哈尔滨工业大学\我的企业文档\项目复盘图片\APP介绍页面.jpg" width="100%"/><br/>关于应用</td>
+    <td align="center"><img src="./APP个人信息页面.jpg" width="100%"/><br/>个人信息</td>
+    <td align="center"><img src="./APP设置页面.jpg" width="100%"/><br/>系统设置</td>
+    <td align="center"><img src="./APP介绍页面.jpg" width="100%"/><br/>关于应用</td>
   </tr>
 </table>
-
-**（5）专业名称解释**：
-
-  - **OkHttp**是 Android 开发的HTTP 网络通信框架。
-  - **Retrofit**是对 OkHttp 进行高级封装的一个网络请求库。
-  - **Gson**是 Google 提供的一个用来解析 JSON 数据的开源工具库。
-  - **Material Design（常被简称为 MD 设计）**是 Google 推出的一套“官方设计说明书”。
-  - **侧边抽屉导航（DrawerLayout）**是位于这个APP项目左侧的菜单栏。
-  - **TabLayout** 是位于屏幕顶部的一排“标签选项卡”。
-  - **RecyclerView**是 Android 里最常用的“超级滚动列表”。
-  - **适配器（Adapter）**负责把原始的文字数据（JSON格式）拿过来，精准地塞进设计好的漂亮卡片模具里。
-  - **FileProvider 与 Android 文件访问权限：**从 Android 7.0 开始，谷歌为了系统安全，禁止 App 之间直接暴露文件的真实物理路径（`file://` URI）。`FileProvider` 是一种特殊的安全机制，它能把真实路径转换成临时的虚拟路径（`content://` URI），并赋予临时读写权限。
-  - **Retrofit 的 Multipart 表单上传：**`Multipart/form-data` 是一种 HTTP 网络请求格式。平时发文字用的是普通的 JSON 格式，但如果要传图片（二进制大文件），就必须用 Multipart 格式，它允许在同一次网络请求中，把“文本参数”和“二进制文件”像切蛋糕一样分块打包，一起发给服务器。
-  - **Android Jetpack** 是谷歌官方推出的一套用来帮开发者“少写代码、少写 Bug”的标准高级组件库（可以理解为 Android 开发的“官方全家桶”）。
-  - **WorkManager** 是这个全家桶里，专门负责处理“可保证执行的后台延迟任务”的核心组件。无论你的 App 是在前台运行、被用户强行划掉退出了，甚至是手机没电关机后又重启了，只要系统条件允许（比如连上了网），WorkManager 都会向系统申请资源，都会把这个后台任务执行完。
